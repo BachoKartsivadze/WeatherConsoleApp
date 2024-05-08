@@ -12,25 +12,24 @@ var API_key = configuration.GetValue<string>("APIKey");
 Console.WriteLine("enter the city");
 string city = Console.ReadLine();
 
-using (WebClient web = new WebClient())
- {
-
+using (HttpClient client = new HttpClient())
+{
     // create url
     string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_key}";
 
-    // wrire information from url in json
-    var json = web.DownloadString(url);
+    // Send a GET request asynchronously and read the response as a string
+    var response = await client.GetAsync(url);
+    var json = await response.Content.ReadAsStringAsync();
 
-    // write json information in my class(weatherinfo)
-    WeatherInfo.root Info = JsonConvert.DeserializeObject<WeatherInfo.root>(json);                               
+    // Deserialize the JSON response into your WeatherInfo class
+    WeatherInfo.root Info = JsonConvert.DeserializeObject<WeatherInfo.root>(json);
 
-
-    // output result
+    // Output result
     Console.WriteLine($"coordinates = {Info.coord.lon}, {Info.coord.lat}");
     Console.WriteLine($"weather = {Info.weather[0].main}");
     Console.WriteLine($"temperature = {Info.main.temp} F");
     Console.WriteLine($"pressure = {Info.main.pressure} P");
     Console.WriteLine($"humidity = {Info.main.humidity}");
- }
+}
 
 
