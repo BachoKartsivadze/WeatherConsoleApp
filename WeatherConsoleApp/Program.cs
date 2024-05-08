@@ -15,7 +15,7 @@ string city = Console.ReadLine();
 using (HttpClient client = new HttpClient())
 {
     // create url
-    string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_key}";
+    string url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_key}&units=metric";
 
     // Send a GET request asynchronously and read the response as a string
     var response = await client.GetAsync(url);
@@ -30,6 +30,16 @@ using (HttpClient client = new HttpClient())
     Console.WriteLine($"temperature = {Info.main.temp} F");
     Console.WriteLine($"pressure = {Info.main.pressure} P");
     Console.WriteLine($"humidity = {Info.main.humidity}");
+
+    int temperatureInfarenheits = convertTofarenheits(Info.main.temp);
+    Console.WriteLine($"temperature in farenheit is {temperatureInfarenheits}F");
 }
+
+int convertTofarenheits(double celsiusValue) {
+    double farenheitValue = 0;
+    farenheitValue = (celsiusValue * 1.8) + 32;
+    return (int)farenheitValue;
+}
+
 
 
